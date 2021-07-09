@@ -5,7 +5,7 @@ services:
             context: .
             args:
                 NODE_ENV: test
-        command: bash -c "cd src/db && npx knex migrate:latest && npm run test"
+        command: bash -c "cd src/db && npx knex migrate:rollback && npm run test"
         volumes:
             - ./:/app:ro
             - /app/node_modules
