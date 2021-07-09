@@ -5,7 +5,7 @@ jobs:
   pull-and-test:
     docker:
       - image: arvindr226/alpine-ssh
-     steps:
+    steps:
       - checkout
       - run: ssh -oStrictHostKeyChecking=no -v $USER@$IP "./test.sh"
   pull-and-build:
