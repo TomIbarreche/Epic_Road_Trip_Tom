@@ -21,7 +21,7 @@ class PreferenceController {
                 user_preferences.user_preferences.push(pref);
             });
             user_preferences.user_id = parseInt(user_id);
-            res.status(201).json(user_preferences);
+            res.status(200).json(user_preferences);
         } catch(err) {
             next(ApiError.internalServerError("Oups! Something went wrong"));
         }
@@ -46,7 +46,7 @@ class PreferenceController {
             let pref = {};
             pref[pref_value.pref_key] = pref_value.pref_value;
             prefToreturn.user_preferences.push(pref);
-            res.status(201).json(prefToreturn);
+            res.status(200).json(prefToreturn);
         } catch (error) {
             next(ApiError.internalServerError("Oups! Something went wrong"));
         }
@@ -55,6 +55,7 @@ class PreferenceController {
     async postPreferencesForUser(req,res,next){
         try {
             const user_id = req.body.user_id;
+            console.log(user_id);
             if (await userDAO.getUserById(user_id) == null){
                 next(ApiError.routeNotFound("Can't find this user"));
                 return
@@ -91,7 +92,7 @@ class PreferenceController {
                     await preferenceDAO.deletePreferencesByNameforUser(prefToDelete[pref], user_id);
                 }
             }
-            res.status(201).json({user_id: parseInt(user_id)});
+            res.status(202).json({user_id: parseInt(user_id)});
         } catch (error) {
             next(ApiError.internalServerError("Oups! Something went wrong"));
         }

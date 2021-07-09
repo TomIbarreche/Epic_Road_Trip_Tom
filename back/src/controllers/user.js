@@ -16,7 +16,7 @@ class UserController {
     async getAllUsers(req, res, next){
         try{
             const users = await userDAO.getAllUsers();
-            res.status(201).json(users);
+            res.status(200).json(users);
         }catch(err) {
             console.log(err);
             next(ApiError.internalServerError("Oups! Something went wrong"));
@@ -30,7 +30,7 @@ class UserController {
                 next(ApiError.routeNotFound("Can't find this user"));
                 return
             }
-            res.status(201).json(user);
+            res.status(200).json(user);
         }catch(err) {
             next(ApiError.internalServerError("Oups! Something went wrong"));
         }
@@ -65,7 +65,7 @@ class UserController {
                 next(ApiError.routeNotFound("Can't find this user"));
                 return
             }
-            res.status(201).json(deletedUser);
+            res.status(202).json(deletedUser);
         }catch(err){
             next(ApiError.internalServerError("Oups! Something went wrong"));
         }

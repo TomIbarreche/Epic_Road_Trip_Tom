@@ -81,7 +81,7 @@ class RouteDataController {
             const data_key = req.params.data_key;
             const data = await route_dataDAO.deleteRouteData(user_id, route_id, data_key);
             if(data > 0){
-              res.status(201).json("The data "+data_key+" for the route "+route_id+" and user "+user_id+" has been deleted.");
+              res.status(202).json("The data "+data_key+" for the route "+route_id+" and user "+user_id+" has been deleted.");
             }else{
               res.status(404).json("The routes data couldn't be deleted");
             }
@@ -98,7 +98,7 @@ class RouteDataController {
             const data = await route_dataDAO.deleteRouteAllData(user_id, route_id);
 
             if(data > 0){
-              res.status(201).json("All the data for the route "+route_id+" and user "+user_id+" has been deleted.");
+              res.status(202).json("All the data for the route "+route_id+" and user "+user_id+" has been deleted.");
             }else{
               res.status(404).json("The routes data couldn't be deleted");
             }

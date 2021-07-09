@@ -29,7 +29,7 @@ describe('Test for user preferences',()=>{
             };
             insertedUser=  await request(server.app).post('/api/v1/signUp/').send(user);
             let userPref = await request(server.app).get(`/api/v1/preferences/${insertedUser.body[0].id}`)
-            expect(userPref.status).to.equal(201);
+            expect(userPref.status).to.equal(200);
             expect(userPref.body.user_id).to.equal(insertedUser.body[0].id);
             expect(userPref.body.user_preferences.length).to.equal(0);
         })
@@ -54,7 +54,7 @@ describe('Test for user preferences',()=>{
 
         it("should retrieve the user preferences", async() => {
             let userPreferences =  await request(server.app).get(`/api/v1/preferences/${insertedUser.body[0].id}`);
-            expect(userPreferences.status).to.equal(201);
+            expect(userPreferences.status).to.equal(200);
             expect(userPreferences.body.user_id).to.equal(insertedUser.body[0].id);
             expect(userPreferences.body.user_preferences.length).to.equal(3);
             expect(userPreferences.body.user_preferences[0].gender).to.equal("hombre");
@@ -62,7 +62,7 @@ describe('Test for user preferences',()=>{
 
         it("should retrieve the user preferences by its name", async() => {
             let userPreferences =  await request(server.app).get(`/api/v1/preferences/${insertedUser.body[0].id}/gender`);
-            expect(userPreferences.status).to.equal(201);
+            expect(userPreferences.status).to.equal(200);
             expect(userPreferences.body.user_id).to.equal(insertedUser.body[0].id);
             expect(userPreferences.body.user_preferences.length).to.equal(1);
             expect(userPreferences.body.user_preferences[0].gender).to.equal("hombre");
@@ -85,11 +85,11 @@ describe('Test for user preferences',()=>{
                 user_preferences: ["gender", "vegan"]
             }
             let userPreferences =  await request(server.app).delete(`/api/v1/preferences/${insertedUser.body[0].id}`).send(preferencesToDelete);
-            expect(userPreferences.status).to.equal(201);
+            expect(userPreferences.status).to.equal(202);
             expect(userPreferences.body.user_id).to.equal(insertedUser.body[0].id);
 
             let userPreferencesAfterDelete =  await request(server.app).get(`/api/v1/preferences/${insertedUser.body[0].id}`);
-            expect(userPreferencesAfterDelete.status).to.equal(201);
+            expect(userPreferencesAfterDelete.status).to.equal(200);
             expect(userPreferencesAfterDelete.body.user_id).to.equal(insertedUser.body[0].id);
             expect(userPreferencesAfterDelete.body.user_preferences.length).to.equal(1);
         })

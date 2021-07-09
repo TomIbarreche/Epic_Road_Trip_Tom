@@ -74,7 +74,7 @@ describe('Test for route API',()=>{
 
         it("Should DELETE the route", async()=>{
           const response = await request(server.app).delete('/api/v1/routes/'+user_id+'/'+insertedRoute.body[0].id).send();
-          expect(response.status).to.equal(201);
+          expect(response.status).to.equal(202);
         })
     })
 

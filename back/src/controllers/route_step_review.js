@@ -81,7 +81,7 @@ class RouteStepReviewController {
             const step_id = req.params.step_id;
             const review_id = req.params.review_id;
             const review = await route_step_reviewDAO.deleteRouteStepReview(user_id, route_id, step_id, review_id);
-            res.status(201).json("Review ("+review_id+") for the route's ("+route_id+") step "+step_id+" and user "+user_id+" has been deleted.");
+            res.status(202).json("Review ("+review_id+") for the route's ("+route_id+") step "+step_id+" and user "+user_id+" has been deleted.");
         } catch (error) {
             res.status(400).json(error);
         }
@@ -94,7 +94,7 @@ class RouteStepReviewController {
             const route_id =  req.params.route_id;
             const step_id = req.params.step_id;
             const reviews = await route_step_reviewDAO.deleteRouteStepReviews(user_id, route_id, step_id);
-            res.status(201).json("All the reviews for the route's ("+route_id+") step "+step_id+" and user "+user_id+" has been deleted.");
+            res.status(202).json("All the reviews for the route's ("+route_id+") step "+step_id+" and user "+user_id+" has been deleted.");
         } catch (error) {
             res.status(400).json(error);
         }

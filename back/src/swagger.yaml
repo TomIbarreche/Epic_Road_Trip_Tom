@@ -19,6 +19,10 @@ definition:
       description: The user's routes
     - name: Routes Data
       description: The user's routes data
+    - name: Routes Steps
+      description: The user's routes steps
+    - name: Routes Steps Reviews
+      description: The user's routes steps reviews
 
   paths:
     #-----------------------------------------------------------------------------------
@@ -87,7 +91,7 @@ definition:
         summary: Return all users
         tags: [Users]
         responses:
-          201:
+          200:
             description: list is good
             content:
               application/json:
@@ -102,7 +106,7 @@ definition:
                 schema:
                   $ref: '#/components/schemas/ApiError'
     #-----------------------------------------------------------------------------------
-    /api/v1/users/{id}:
+    /api/v1/users/{user_id}:
       #---------------------------------------------------------
       get:
         summary: Get user by id
@@ -110,7 +114,7 @@ definition:
         parameters:
             - $ref: '#/components/parameters/userId'
         responses:
-            201:
+            200:
                 description: success
                 content:
                     application/json:
@@ -154,7 +158,7 @@ definition:
         parameters:
             - $ref: '#/components/parameters/userId'
         responses:
-            201:
+            202:
               description: The user as been deleted
               content:
                   application/json:
@@ -163,7 +167,7 @@ definition:
                       properties:
                         id:
                           type: string
-                          description: user id that has been deleted
+                          description: user id that have been deleted
             404:
                 description: Cannot find the user
             500:
@@ -193,7 +197,7 @@ definition:
           500:
             description: something went wrong
     #-----------------------------------------------------------------------------------
-    /api/v1/preferences/{id}:
+    /api/v1/preferences/{user_id}:
       #-----------------------------------------------------
       get:
         summary: Get preferences of the user by id
@@ -201,7 +205,7 @@ definition:
         parameters:
             - $ref: '#/components/parameters/userId'
         responses:
-            201:
+            200:
                 description: success
                 content:
                     application/json:
@@ -224,7 +228,7 @@ definition:
               schema:
                 $ref: '#/components/schemas/DeletePreferences'
         responses:
-            201:
+            202:
               description: The preferences have been deleted
               content:
                   application/json:
@@ -233,7 +237,7 @@ definition:
                       properties:
                         id:
                           type: integer
-                          description: user id that has been deleted
+                          description: user id that have been deleted
             404:
                 description: Cannot find the user
             500:
@@ -262,7 +266,7 @@ definition:
             500:
               description: an error occured
     #-----------------------------------------------------------------------------------
-    /api/v1/preferences/{id}/{name}:
+    /api/v1/preferences/{user_id}/{name}:
       get:
         summary: Get a chosen preferences for the user by id and name
         tags: [Preferences]
@@ -270,7 +274,7 @@ definition:
             - $ref: '#/components/parameters/userId'
             - $ref: '#/components/parameters/preferenceName'
         responses:
-            201:
+            200:
                 description: success
                 content:
                     application/json:
@@ -298,16 +302,16 @@ definition:
               schema:
                 $ref: '#/components/schemas/Route'
         responses:
-        201:
-            description: success
-            content:
-                application/json:
-                    schema:
-                        $ref: '#/components/schemas/Route'
-        400:
-            description: An SQL error
-        500:
-            description: Unexpected error
+          201:
+              description: success
+              content:
+                  application/json:
+                      schema:
+                          $ref: '#/components/schemas/Route'
+          400:
+              description: A SQL error
+          500:
+              description: Unexpected error
       #-----------------------------------------------------
       get:
         summary: Get all the routes for the user
@@ -334,14 +338,10 @@ definition:
         parameters:
             - $ref: '#/components/parameters/userId'
         responses:
-            201:
-                description: Routes deleted
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/Route'
+            202:
+                description: All the routes for user 2 have been deleted.
             400:
-                description: An SQL error
+                description: A SQL error
             404:
                 description: No Routes found for the user
             500:
@@ -362,7 +362,7 @@ definition:
                         schema:
                             $ref: '#/components/schemas/Route'
             400:
-                description: An SQL error
+                description: A SQL error
             404:
                 description: Route not found for the user
             500:
@@ -388,7 +388,7 @@ definition:
                         schema:
                             $ref: '#/components/schemas/PutRoute'
             400:
-                description: An SQL error
+                description: A SQL error
             404:
                 description: No Routes found for the user
             500:
@@ -401,14 +401,10 @@ definition:
             - $ref: '#/components/parameters/userId'
             - $ref: '#/components/parameters/routeId'
         responses:
-            201:
-                description: Route deleted
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/deleteRoutes'
+            202:
+                description: The route 2 for user 1 have been deleted.
             400:
-                description: An SQL error
+                description: A SQL error
             404:
                 description: Route not found for the user
             500:
@@ -418,7 +414,7 @@ definition:
     #-----------------------------------------------------------------------------------
     /api/v1/routes_data/{user_id}/{route_id}:
       post:
-        summary: Add a new route data
+        summary: Add new(s) route data
         tags: [Routes Data]
         parameters:
             - $ref: '#/components/parameters/userId'
@@ -428,18 +424,14 @@ definition:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RouteData'
+                $ref: '#/components/schemas/GetRouteData'
         responses:
-        201:
-            description: success
-            content:
-                application/json:
-                    schema:
-                        $ref: '#/components/schemas/RouteData'
-        400:
-            description: An SQL error
-        500:
-            description: Unexpected error
+          201:
+              description: success
+          400:
+              description: A SQL error
+          500:
+              description: Unexpected error
       #-----------------------------------------------------
       get:
         summary: Get all the route data
@@ -447,21 +439,15 @@ definition:
         parameters:
             - $ref: '#/components/parameters/userId'
             - $ref: '#/components/parameters/routeId'
-        requestBody:
-          required: true
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/RouteData'
         responses:
             200:
                 description: success
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/RouteData'
+                            $ref: '#/components/schemas/GetRouteData'
             400:
-                description: An SQL error
+                description: A SQL error
             404:
                 description: No Route data found for the user
             500:
@@ -487,7 +473,7 @@ definition:
                         schema:
                             $ref: '#/components/schemas/PutRouteData'
             400:
-                description: An SQL error
+                description: A SQL error
             404:
                 description: No Route data found for the user
             500:
@@ -500,14 +486,10 @@ definition:
             - $ref: '#/components/parameters/userId'
             - $ref: '#/components/parameters/routeId'
         responses:
-            201:
-                description: success
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/DeleteRouteData'
+            202:
+                description: All the data for the route 3 and user 1 have been deleted.
             400:
-                description: An SQL error
+                description: A SQL error
             404:
                 description: No route data found for the user
             500:
@@ -529,39 +511,35 @@ definition:
                         schema:
                             $ref: '#/components/schemas/GetRouteSingleData'
             400:
-                description: An SQL error
+                description: A SQL error
             404:
                 description: Route / Data not found for the user
             500:
                 description: Unexpected error
       #-----------------------------------------------------
       delete:
-        summary: Delete all the route data
+        summary: Delete a single route data
         tags: [Routes Data]
         parameters:
             - $ref: '#/components/parameters/userId'
             - $ref: '#/components/parameters/routeId'
             - $ref: '#/components/parameters/routeDataName'
         responses:
-            201:
-                description: success
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/PeleteRouteSingleData'
+            202:
+                description: The data toto for the route 3 and user 1 have been deleted.
             400:
-                description: An SQL error
+                description: A SQL error
             404:
                 description: Route data not found for the user
             500:
                 description: Unexpected error
     #-----------------------------------------------------------------------------------
-    # Routes Step
+    # Routes Steps
     #-----------------------------------------------------------------------------------
     /api/v1/routes_steps/{user_id}/{route_id}:
       post:
         summary: Add a new step to the route
-        tags: [Routes Step]
+        tags: [Routes Steps]
         parameters:
             - $ref: '#/components/parameters/userId'
             - $ref: '#/components/parameters/routeId'
@@ -572,57 +550,59 @@ definition:
               schema:
                 $ref: '#/components/schemas/RouteStep'
         responses:
-        201:
-            description: success
-            content:
-                application/json:
-                    schema:
-                        $ref: '#/components/schemas/RouteStep'
-        400:
-            description: An SQL error
-        500:
-            description: Unexpected error
+          201:
+              description: success
+              content:
+                  application/json:
+                      schema:
+                          $ref: '#/components/schemas/postRouteStep'
+          400:
+              description: A SQL error
+          404:
+              description: Route not found
+          500:
+              description: Unexpected error
       #-----------------------------------------------------
       get:
         summary: Get all the steps for the route
-        tags: [Routes Step]
+        tags: [Routes Steps]
         parameters:
             - $ref: '#/components/parameters/userId'
             - $ref: '#/components/parameters/routeId'
         responses:
-        200:
-            description: success
-            content:
-                application/json:
-                    schema:
-                        $ref: '#/components/schemas/GetRouteSteps'
-        400:
-            description: An SQL error
-        500:
-            description: Unexpected error
+          200:
+              description: success
+              content:
+                  application/json:
+                      schema:
+                          $ref: '#/components/schemas/GetRouteSteps'
+          400:
+              description: A SQL error
+          404:
+              description: Route / steps not found
+          500:
+              description: Unexpected error
       #-----------------------------------------------------
       delete:
         summary: Delete all the steps for the route
-        tags: [Routes Step]
+        tags: [Routes Steps]
         parameters:
             - $ref: '#/components/parameters/userId'
             - $ref: '#/components/parameters/routeId'
         responses:
-        201:
-            description: success
-            content:
-                application/json:
-                    schema:
-                        $ref: '#/components/schemas/DeleteRouteSteps'
-        400:
-            description: An SQL error
-        500:
-            description: Unexpected error
+          202:
+              description: All the steps have been deleted
+          400:
+              description: A SQL error
+          404:
+              description: Route not found
+          500:
+              description: Unexpected error
     #-----------------------------------------------------------------------------------
     /api/v1/routes_steps/{user_id}/{route_id}/{step_id}:
       put:
         summary: Edit a route's step
-        tags: [Routes Step]
+        tags: [Routes Steps]
         parameters:
             - $ref: '#/components/parameters/userId'
             - $ref: '#/components/parameters/routeId'
@@ -634,61 +614,63 @@ definition:
               schema:
                 $ref: '#/components/schemas/PutRouteStep'
         responses:
-        201:
-            description: success
-            content:
-                application/json:
-                    schema:
-                        $ref: '#/components/schemas/PutRouteStep'
-        400:
-            description: An SQL error
-        500:
-            description: Unexpected error
+          201:
+              description: success
+              content:
+                  application/json:
+                      schema:
+                          $ref: '#/components/schemas/PutRouteStep'
+          400:
+              description: A SQL error
+          404:
+              description: Route / steps not found
+          500:
+              description: Unexpected error
       #-----------------------------------------------------
       get:
         summary: Get a route's step
-        tags: [Routes Step]
+        tags: [Routes Steps]
         parameters:
             - $ref: '#/components/parameters/userId'
             - $ref: '#/components/parameters/routeId'
             - $ref: '#/components/parameters/stepId'
         responses:
-        200:
-            description: success
-            content:
-                application/json:
-                    schema:
-                        $ref: '#/components/schemas/RouteStep'
-        400:
-            description: An SQL error
-        500:
-            description: Unexpected error
+          200:
+              description: success
+              content:
+                  application/json:
+                      schema:
+                          $ref: '#/components/schemas/RouteStep'
+          400:
+              description: A SQL error
+          404:
+              description: Route / step not found
+          500:
+              description: Unexpected error
       #-----------------------------------------------------
       delete:
         summary: Delete a route's step
-        tags: [Routes Step]
+        tags: [Routes Steps]
         parameters:
             - $ref: '#/components/parameters/userId'
             - $ref: '#/components/parameters/routeId'
             - $ref: '#/components/parameters/stepId'
         responses:
-        201:
-            description: success
-            content:
-                application/json:
-                    schema:
-                        $ref: '#/components/schemas/DeleteRouteStep'
-        400:
-            description: An SQL error
-        500:
-            description: Unexpected error
+          202:
+              description: Delete a route's step
+          400:
+              description: A SQL error
+          404:
+              description: Route / step not found
+          500:
+              description: Unexpected error
     #-----------------------------------------------------------------------------------
-    # Routes Step Review
+    # Routes Steps Reviews
     #-----------------------------------------------------------------------------------
     /api/v1/routes_steps_reviews/{user_id}/{route_id}/{step_id}:
       post:
         summary: Add a new review to the route's step
-        tags: [Routes Step Review]
+        tags: [Routes Steps Reviews]
         parameters:
             - $ref: '#/components/parameters/userId'
             - $ref: '#/components/parameters/routeId'
@@ -700,59 +682,57 @@ definition:
               schema:
                 $ref: '#/components/schemas/RouteStepReview'
         responses:
-        201:
-            description: success
-            content:
-                application/json:
-                    schema:
-                        $ref: '#/components/schemas/RouteStepReview'
-        400:
-            description: An SQL error
-        500:
-            description: Unexpected error
+            201:
+                description: success
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/RouteStepReview'
+            400:
+                description: A SQL error
+            500:
+                description: Unexpected error
       #-----------------------------------------------------
       get:
         summary: Get all the reviews for the step
-        tags: [Routes Step Review]
+        tags: [Routes Steps Reviews]
         parameters:
             - $ref: '#/components/parameters/userId'
             - $ref: '#/components/parameters/routeId'
             - $ref: '#/components/parameters/stepId'
         responses:
-        200:
-            description: success
-            content:
-                application/json:
-                    schema:
-                        $ref: '#/components/schemas/GetRouteStepReviews'
-        400:
-            description: An SQL error
-        500:
-            description: Unexpected error
+            200:
+                description: success
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/GetRouteStepReviews'
+            400:
+                description: A SQL error
+            404:
+                description: Reviews not found
+            500:
+                description: Unexpected error
       #-----------------------------------------------------
       delete:
         summary: Delete all the reviews for the step
-        tags: [Routes Step Review]
+        tags: [Routes Steps Reviews]
         parameters:
             - $ref: '#/components/parameters/userId'
             - $ref: '#/components/parameters/routeId'
             - $ref: '#/components/parameters/stepId'
         responses:
-        201:
-            description: success
-            content:
-                application/json:
-                    schema:
-                        $ref: '#/components/schemas/DeleteRouteStepReviews'
-        400:
-            description: An SQL error
-        500:
-            description: Unexpected error
+          202:
+              description: All the reviews have been deleted
+          400:
+              description: A SQL error
+          500:
+              description: Unexpected error
     #-----------------------------------------------------------------------------------
     /api/v1/routes_steps_reviews/{user_id}/{route_id}/{step_id}/{review_id}:
       put:
         summary: Edit a route's step's review
-        tags: [Routes Step Review]
+        tags: [Routes Steps Reviews]
         parameters:
             - $ref: '#/components/parameters/userId'
             - $ref: '#/components/parameters/routeId'
@@ -765,66 +745,62 @@ definition:
               schema:
                 $ref: '#/components/schemas/PutRouteStepReview'
         responses:
-        201:
-            description: success
-            content:
-                application/json:
-                    schema:
-                        $ref: '#/components/schemas/PutRouteStepReview'
-        400:
-            description: An SQL error
-        500:
-            description: Unexpected error
+          201:
+              description: The review have been updated
+          400:
+              description: A SQL error
+          404:
+              description: Review not found
+          500:
+              description: Unexpected error
       #-----------------------------------------------------
       get:
         summary: Get a single review
-        tags: [Routes Step Review]
+        tags: [Routes Steps Reviews]
         parameters:
             - $ref: '#/components/parameters/userId'
             - $ref: '#/components/parameters/routeId'
             - $ref: '#/components/parameters/stepId'
             - $ref: '#/components/parameters/reviewId'
         responses:
-        200:
-            description: success
-            content:
-                application/json:
-                    schema:
-                        $ref: '#/components/schemas/RouteStepReview'
-        400:
-            description: An SQL error
-        500:
-            description: Unexpected error
+          200:
+              description: success
+              content:
+                  application/json:
+                      schema:
+                          $ref: '#/components/schemas/RouteStepReview'
+          400:
+              description: A SQL error
+          404:
+              description: Review not found
+          500:
+              description: Unexpected error
       #-----------------------------------------------------
       delete:
         summary: Delete a single review
-        tags: [Routes Step Review]
+        tags: [Routes Steps Reviews]
         parameters:
             - $ref: '#/components/parameters/userId'
             - $ref: '#/components/parameters/routeId'
             - $ref: '#/components/parameters/stepId'
             - $ref: '#/components/parameters/reviewId'
         responses:
-        201:
-            description: success
-            content:
-                application/json:
-                    schema:
-                        $ref: '#/components/schemas/DeleteRouteStepReview'
-        400:
-            description: An SQL error
-        500:
-            description: Unexpected error
+          202:
+              description: The review have been deleted
+          400:
+              description: A SQL error
+          500:
+              description: Unexpected error
   components:
     parameters:
       #-----------------------------------------------------
       userId:
-        name: id
+        name: user_id
         in: path
         required: true
         description: The id of the user
         schema:
-          type: string
+          type: integer
       #-----------------------------------------------------
       preferenceName:
         name: name
@@ -843,7 +819,7 @@ definition:
           type: string
       #-----------------------------------------------------
       routeDataName:
-        name: route_data_name
+        name: data_name
         in: path
         required: true
         description: The route's data name
@@ -851,7 +827,7 @@ definition:
           type: string
       #-----------------------------------------------------
       stepId:
-        name: Route_Step_ID
+        name: step_id
         in: path
         required: true
         description: The route's step's id
@@ -859,7 +835,7 @@ definition:
           type: string
       #-----------------------------------------------------
       reviewId:
-        name: Route_Step_Review_ID
+        name: review_id
         in: path
         required: true
         description: The route's step's review's id
@@ -1039,7 +1015,34 @@ definition:
       #                    ROUTES
       #-----------------------------------------------------
       GetRoutes:
-        type: Array of object
+        type: array
+        items:
+          type: Object
+          properties:
+            user_id:
+              type: integer
+              description: User's id
+            id:
+              type: integer
+              description: Route's id
+            date_planned:
+              type: datetime
+              description: Date when this route was planned.
+            departure:
+              type: datetime
+              description: Date of departure
+            from_label:
+              type: string
+              description: Name of the initial location
+            from_coords:
+              type: string
+              description: Coordinates of the initial location
+            to_label:
+              type: string
+              description: Name of the final location
+            to_coords:
+              type: string
+              description: Coordinates of the final location
         required:
           - user_id
         properties:
@@ -1047,16 +1050,85 @@ definition:
             type: array
             description: Routes of the user
         example:
-          routes: Une tableau d'objet
+          - user_id: 1
+            id: 1
+            date_planned: '2013-11-28 23:09:11.761166+03'
+            departure: '2013-11-28 23:09:11.761166+03'
+            from_label: 'Toulouse, 31000, France'
+            from_coords: '43.600735, 1.421452'
+            to_label: 'Paris, 75018, France'
+            to_coords: '48.887290, 2.355641'
+          - user_id: 1
+            id: 2
+            date_planned: '2013-11-28 23:09:11.761166+03'
+            departure: '2013-11-28 23:09:11.761166+03'
+            from_label: 'Toulouse, 31000, France'
+            from_coords: '43.600735, 1.421452'
+            to_label: 'Paris, 75018, France'
+            to_coords: '48.887290, 2.355641'
+      #-----------------------------------------------------
+      GetRoute:
+        type: object
+        required:
+          - user_id
+        properties:
+          user_id:
+            type: integer
+            description: User's id
+          id:
+            type: integer
+            description: Route's id
+          date_planned:
+            type: datetime
+            description: Date when this route was planned.
+          departure:
+            type: datetime
+            description: Date of departure
+          from_label:
+            type: string
+            description: Name of the initial location
+          from_coords:
+            type: string
+            description: Coordinates of the initial location
+          to_label:
+            type: string
+            description: Name of the final location
+          to_coords:
+            type: string
+            description: Coordinates of the final location
+        example:
+            user_id: 1
+            id: 1
+            date_planned: '2013-11-28 23:09:11.761166+03'
+            departure: '2013-11-28 23:09:11.761166+03'
+            from_label: 'Toulouse, 31000, France'
+            from_coords: '43.600735, 1.421452'
+            to_label: 'Paris, 75018, France'
+            to_coords: '48.887290, 2.355641'
       #-----------------------------------------------------
       Route:
         type: object
         required:
           - route
         properties:
-          route:
-            type: object
-            description: route to add
+          date_planned:
+            type: datetime
+            description: Date when this route was planned.
+          departure:
+            type: datetime
+            description: Date of departure
+          from_label:
+            type: string
+            description: Name of the initial location
+          from_coords:
+            type: string
+            description: Coordinates of the initial location
+          to_label:
+            type: string
+            description: Name of the final location
+          to_coords:
+            type: string
+            description: Coordinates of the final location
         example:
           date_planned: '2013-11-28 23:09:11.761166+03'
           departure: '2013-11-28 23:09:11.761166+03'
@@ -1064,14 +1136,30 @@ definition:
           from_coords: '43.600735, 1.421452'
           to_label: 'Paris, 75018, France'
           to_coords: '48.887290, 2.355641'
+      #-----------------------------------------------------
       PutRoute:
         type: object
         required:
           - route
         properties:
-          route:
-            type: object
-            description: route to add
+          date_planned:
+            type: datetime
+            description: Date when this route was planned.
+          departure:
+            type: datetime
+            description: Date of departure
+          from_label:
+            type: string
+            description: Name of the initial location
+          from_coords:
+            type: string
+            description: Coordinates of the initial location
+          to_label:
+            type: string
+            description: Name of the final location
+          to_coords:
+            type: string
+            description: Coordinates of the final location
         example:
           date_planned: '2013-11-29 23:09:11.761166+03'
           departure: '2013-11-30 20:09:11.761166+03'
@@ -1082,28 +1170,98 @@ definition:
       #-----------------------------------------------------
       #                  ROUTE DATA
       #-----------------------------------------------------
-      RouteData:
-        type: Object
+      GetRouteData:
+        type: array
+        items:
+          type: Object
+          properties:
+            user_id:
+              type: integer
+              description: User's id
+            id:
+              type: integer
+              description: Route's id
+            data_key:
+              type: string
+              description: Name of the data
+            data_value:
+              type: string
+              description: Data
         required:
-          - data
+          - user_id
+          - route_id
         properties:
-          routes:
-            type: object
-            description: Route data
+          routeData:
+            type: array
+            description: All the data of the route
         example:
-          max_time: "25h"
-          distance: "2500km"
+          - user_id: 1
+            route_id: 1
+            data_key: "max_time"
+            data_value: "25h"
+          - user_id: 1
+            route_id: 1
+            data_key: "distance"
+            data_value: "2500km"
+      #-----------------------------------------------------
       PutRouteData:
+        type: array
+        items:
+          type: Object
+          properties:
+            user_id:
+              type: integer
+              description: User's id
+            id:
+              type: integer
+              description: Route's id
+            data_key:
+              type: string
+              description: Name of the data
+            data_value:
+              type: string
+              description: Data
+        required:
+          - user_id
+          - route_id
+        properties:
+          routeData:
+            type: array
+            description: All the data of the route
+        example:
+          - user_id: 1
+            route_id: 1
+            data_key: "max_time"
+            data_value: "24h"
+          - user_id: 1
+            route_id: 1
+            data_key: "distance"
+            data_value: "2501km"
+      #-----------------------------------------------------
+      GetRouteSingleData:
         type: Object
         required:
-          - data
+          - user_id
+          - route_id
+          - data_key
         properties:
-          routes:
-            type: object
-            description: Route data
+          user_id:
+            type: integer
+            description: User's id
+          id:
+            type: integer
+            description: Route's id
+          data_key:
+            type: string
+            description: Name of the data
+          data_value:
+            type: string
+            description: Data
         example:
-          max_time: "30h"
-          distance: "2600km"
+          user_id: 1
+          route_id: 1
+          data_key: "max_time"
+          data_value: "24h"
       #-----------------------------------------------------
       #                  ROUTE STEP
       #-----------------------------------------------------
@@ -1112,46 +1270,171 @@ definition:
         required:
           - data
         properties:
-          routes:
-            type: object
-            description: Route step
+          coords:
+            type: string
+            description: step's coordinates
+          data:
+            type: string
+            description: Data
         example:
           data: "Paris, 75018, France"
           coords: "48.887290, 2.355641"
+      #-----------------------------------------------------
       PutRouteStep:
         type: Object
         required:
           - data
         properties:
-          routes:
-            type: object
-            description: Route step
+          coords:
+            type: string
+            description: step's coordinates
+          data:
+            type: string
+            description: Data
         example:
           data: "Paris, 75018, France"
           coords: "48.887290, 2.355641"
       #-----------------------------------------------------
+      postRouteStep:
+        type: Object
+        required:
+          - data
+        properties:
+          coords:
+            type: string
+            description: step's coordinates
+          data:
+            type: string
+            description: Data
+        example:
+          user_id: 1
+          route_id: 1
+          id: 3
+      #-----------------------------------------------------
+      GetRouteSteps:
+        type: array
+        items:
+          type: Object
+          properties:
+            user_id:
+              type: integer
+              description: User's id
+            route_id:
+              type: integer
+              description: Route's id
+            id:
+              type: integer
+              description: Step's id
+            coords:
+              type: string
+              description: step's coordinates
+            data:
+              type: string
+              description: Data
+        required:
+          - user_id
+          - route_id
+        properties:
+          routeSteps:
+            type: array
+            description: Steps of the route
+        example:
+          - user_id: 1
+            route_id: 1
+            id: 1
+            coords: "48.887290, 2.355641"
+            data: "Paris, 75018, France"
+          - user_id: 1
+            route_id: 1
+            id: 2
+            coords: "48.887290, 2.355641"
+            data: "Paris, 75018, France"
+      #-----------------------------------------------------
       #                 ROUTE STEP REVIEWS
+      #-----------------------------------------------------
+      GetRouteStepReviews:
+        type: array
+        items:
+          type: Object
+          properties:
+            user_id:
+              type: integer
+              description: User's id
+            route_id:
+              type: integer
+              description: Route's id
+            step_id:
+              type: integer
+              description: Step's id
+            id:
+              type: integer
+              description: review's id
+            review:
+              type: string
+              description: step's coordinates
+            rate:
+              type: string
+              description: Data
+            review_id:
+              type: integer
+              description: reviewer id
+        required:
+          - user_id
+          - route_id
+          - step_id
+        properties:
+          routeStepReviews:
+            type: array
+            description: All the reviews for a step
+        example:
+          - user_id: 1
+            route_id: 3
+            step_id: 1
+            id: 5
+            review: "Cool"
+            rate: 5
+            reviewer_id: 1
+          - user_id: 1
+            route_id: 3
+            step_id: 1
+            id: 6
+            review: "Super"
+            rate: 5
+            reviewer_id: 2
       #-----------------------------------------------------
       RouteStepReview:
         type: Object
         required:
           - step
         properties:
-          routes:
-            type: object
-            description: Route step reviews
+          review:
+            type: string
+            description: step's coordinates
+          rate:
+            type: string
+            description: Data
+          review_id:
+            type: integer
+            description: reviewer id
         example:
           review: "Cool"
           rate: "5"
           reviewer_id: 1
+      #-----------------------------------------------------
       PutRouteStepReview:
         type: Object
         required:
           - step
         properties:
-          routes:
-            type: object
-            description: Route step reviews
+          review:
+            type: string
+            description: step's coordinates
+          rate:
+            type: string
+            description: Data
+          review_id:
+            type: integer
+            description: reviewer id
         example:
           review: "C'est pas cool"
           rate: "5"

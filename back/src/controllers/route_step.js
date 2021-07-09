@@ -48,7 +48,7 @@ class RouteStepController {
               res.status(200).json(steps);
             }
         } catch (error) {
-            console.log(error);
+            res.status(400).json(error.detail);
         }
     }
 
@@ -78,7 +78,7 @@ class RouteStepController {
             const step = await route_stepDAO.deleteRouteStep(user_id, route_id, step_id);
 
             if(step > 0){
-              res.status(201).json("The step "+step_id+" for the route "+route_id+" and user "+user_id+" has been deleted.");
+              res.status(202).json("The step "+step_id+" for the route "+route_id+" and user "+user_id+" has been deleted.");
             }else{
               res.status(404).json("The route's step couldn't be deleted");
             }
@@ -95,7 +95,7 @@ class RouteStepController {
             const steps = await route_stepDAO.deleteRouteSteps(user_id, route_id);
 
             if(steps > 0){
-              res.status(201).json("All the steps for the route "+route_id+" and user "+user_id+" has been deleted.");
+              res.status(202).json("All the steps for the route "+route_id+" and user "+user_id+" has been deleted.");
             }else{
               res.status(404).json("The route's steps couldn't be deleted");
             }

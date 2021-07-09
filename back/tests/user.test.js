@@ -20,7 +20,7 @@ describe('Test for user API',()=>{
     describe('Success action',()=>{
         it("should GET 0 user but it's ok",async()=>{
             const response= await request(server.app).get('/api/v1/users/');
-            expect(response.status).to.equal(201)
+            expect(response.status).to.equal(200)
             expect(response.body).to.be.an.instanceof(Array);
             expect(response.body.length).to.equal(0);
         })
@@ -46,14 +46,14 @@ describe('Test for user API',()=>{
             insertedUserThree =  await request(server.app).post('/api/v1/signUp/').send(userThree);
 
             const response= await request(server.app).get('/api/v1/users/');
-            expect(response.status).to.equal(201)
+            expect(response.status).to.equal(200)
             expect(response.body).to.be.an.instanceof(Array);
             expect(response.body.length).to.equal(3);
         })
 
         it('should GET a user by his Id', async() => {
             let response =  await request(server.app).get(`/api/v1/users/${insertedUserTwo.body[0].id}`);
-            expect(response.status).to.equal(201)
+            expect(response.status).to.equal(200)
             expect(response.body.email).to.equal(insertedUserTwo.body[0].email);
         })
 
@@ -68,7 +68,7 @@ describe('Test for user API',()=>{
 
         it('should DELETE the chosen user', async() => {
             let response = await request(server.app).delete(`/api/v1/users/${insertedUserTwo.body[0].id}`);
-            expect(response.status).to.equal(201);
+            expect(response.status).to.equal(202);
             const userList= await request(server.app).get('/api/v1/users/');
             expect(userList.body.length).to.equal(2);
         })
