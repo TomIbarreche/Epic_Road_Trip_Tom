@@ -1,7 +1,7 @@
 definition:
   openapi: 3.0.0
   info:
-    title: Epic Road Trip Api
+    title: Epic Road Trip Api Test
     description: Made by Tom Ibarreche and Aymerick Domergue for Epitech
     version: 0.1.0
   servers:
