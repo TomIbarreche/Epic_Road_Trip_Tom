@@ -1,0 +1,1176 @@
+definition:
+  openapi: 3.0.0
+  info:
+    title: Epic Road Trip Api
+    description: Made by Tom Ibarreche and Aymerick Domergue for Epitech
+    version: 0.1.0
+  servers:
+    - url : "http://167.172.38.156:5000"
+    - url : "http://localhost:5000"
+
+  tags:
+    - name: Auth
+      description: route for authentification
+    - name: Users
+      description: route for users
+    - name: Preferences
+      description: route for user's preferences
+    - name: Routes
+      description: The user's routes
+    - name: Routes Data
+      description: The user's routes data
+
+  paths:
+    #-----------------------------------------------------------------------------------
+    # SignUp
+    #-----------------------------------------------------------------------------------
+    /api/v1/signUp:
+      post:
+        summary: Create a new user
+        tags: [Auth]
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SignUpUser'
+        responses:
+          201:
+            description: success
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/GetUser'
+          400:
+            description: something went wrong
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ApiError'
+          500:
+            description: something went wrong
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ApiError'
+    #-----------------------------------------------------------------------------------
+    /api/v1/signIn:
+      post:
+        summary: User sign in
+        tags: [Auth]
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SignInUser'
+        responses:
+          201:
+            description: success log in
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/GetUser'
+          400:
+            description: bad request
+          401:
+            description: bad password
+          404:
+            description: user not found
+          500:
+            description: something went wrong
+    #-----------------------------------------------------------------------------------
+    # Users
+    #-----------------------------------------------------------------------------------
+    /api/v1/users:
+      get:
+        summary: Return all users
+        tags: [Users]
+        responses:
+          201:
+            description: list is good
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/GetUser'
+          500:
+            description: something went wrong
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ApiError'
+    #-----------------------------------------------------------------------------------
+    /api/v1/users/{id}:
+      #---------------------------------------------------------
+      get:
+        summary: Get user by id
+        tags: [Users]
+        parameters:
+            - $ref: '#/components/parameters/userId'
+        responses:
+            201:
+                description: success
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/GetUser'
+            404:
+                description: The user wasnt found
+            500:
+                description: An error occurs
+      #---------------------------------------------------------
+      put:
+        summary: Update the user by id
+        tags: [Users]
+        parameters:
+            - $ref: '#/components/parameters/userId'
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetUser'
+        responses:
+            201:
+                description: the user was updated
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/GetUser'
+            400:
+                description: Malform request
+            403:
+                description: Credentials alreday taken
+            404:
+                description: can't find the user
+            500:
+                description: Something went wrong
+      #---------------------------------------------------------
+      delete:
+        summary: Delete the user by Id
+        tags: [Users]
+        parameters:
+            - $ref: '#/components/parameters/userId'
+        responses:
+            201:
+              description: The user as been deleted
+              content:
+                  application/json:
+                    schema:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          description: user id that has been deleted
+            404:
+                description: Cannot find the user
+            500:
+              description: an error occured
+    #-----------------------------------------------------------------------------------
+    # Preferences
+    #-----------------------------------------------------------------------------------
+    /api/v1/preferences:
+      post:
+        summary: Post new user preferences
+        tags: [Preferences]
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostPreferences'
+        responses:
+          201:
+            description: success post of user preferences
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/UserId'
+          404:
+            description: user not found
+          500:
+            description: something went wrong
+    #-----------------------------------------------------------------------------------
+    /api/v1/preferences/{id}:
+      #-----------------------------------------------------
+      get:
+        summary: Get preferences of the user by id
+        tags: [Preferences]
+        parameters:
+            - $ref: '#/components/parameters/userId'
+        responses:
+            201:
+                description: success
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/GetPreferences'
+            404:
+                description: The user wasnt found
+            500:
+                description: An error occurs
+      #-----------------------------------------------------
+      delete:
+        summary: Delete the user preferences
+        tags: [Preferences]
+        parameters:
+          - $ref: '#/components/parameters/userId'
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeletePreferences'
+        responses:
+            201:
+              description: The preferences have been deleted
+              content:
+                  application/json:
+                    schema:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          description: user id that has been deleted
+            404:
+                description: Cannot find the user
+            500:
+              description: an error occured
+      #-----------------------------------------------------
+      put:
+        summary: Update the user preferences
+        tags: [Preferences]
+        parameters:
+          - $ref: '#/components/parameters/userId'
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdatePreferences'
+        responses:
+            201:
+              description: The preferences have been updated
+              content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/GetUpdatePreferences'
+            404:
+                description: Cannot find the user
+            500:
+              description: an error occured
+    #-----------------------------------------------------------------------------------
+    /api/v1/preferences/{id}/{name}:
+      get:
+        summary: Get a chosen preferences for the user by id and name
+        tags: [Preferences]
+        parameters:
+            - $ref: '#/components/parameters/userId'
+            - $ref: '#/components/parameters/preferenceName'
+        responses:
+            201:
+                description: success
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/GetPreferences'
+            400:
+                description: This preference doesnt exists
+            404:
+                description: The user wasnt found
+            500:
+                description: An error occured
+    #-----------------------------------------------------------------------------------
+    # Routes
+    #-----------------------------------------------------------------------------------
+    /api/v1/routes/{user_id}:
+      post:
+        summary: Add a new route
+        tags: [Routes]
+        parameters:
+            - $ref: '#/components/parameters/userId'
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Route'
+        responses:
+        201:
+            description: success
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/Route'
+        400:
+            description: An SQL error
+        500:
+            description: Unexpected error
+      #-----------------------------------------------------
+      get:
+        summary: Get all the routes for the user
+        tags: [Routes]
+        parameters:
+            - $ref: '#/components/parameters/userId'
+        responses:
+            200:
+                description: success
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/GetRoutes'
+            400:
+                description: An error occured
+            404:
+                description: No Routes found for the user
+            500:
+                description: Unexpected error
+      #-----------------------------------------------------
+      delete:
+        summary: Delete all the routes
+        tags: [Routes]
+        parameters:
+            - $ref: '#/components/parameters/userId'
+        responses:
+            201:
+                description: Routes deleted
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/Route'
+            400:
+                description: An SQL error
+            404:
+                description: No Routes found for the user
+            500:
+                description: Unexpected error
+    #-----------------------------------------------------------------------------------
+    /api/v1/routes/{user_id}/{route_id}:
+      get:
+        summary: Get a single route for the user
+        tags: [Routes]
+        parameters:
+            - $ref: '#/components/parameters/userId'
+            - $ref: '#/components/parameters/routeId'
+        responses:
+            200:
+                description: success
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/Route'
+            400:
+                description: An SQL error
+            404:
+                description: Route not found for the user
+            500:
+                description: Unexpected error
+      #-----------------------------------------------------
+      put:
+        summary: Update the route
+        tags: [Routes]
+        parameters:
+            - $ref: '#/components/parameters/userId'
+            - $ref: '#/components/parameters/routeId'
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PutRoute'
+        responses:
+            201:
+                description: success
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/PutRoute'
+            400:
+                description: An SQL error
+            404:
+                description: No Routes found for the user
+            500:
+                description: Unexpected error
+      #-----------------------------------------------------
+      delete:
+        summary: Delete the route
+        tags: [Routes]
+        parameters:
+            - $ref: '#/components/parameters/userId'
+            - $ref: '#/components/parameters/routeId'
+        responses:
+            201:
+                description: Route deleted
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/deleteRoutes'
+            400:
+                description: An SQL error
+            404:
+                description: Route not found for the user
+            500:
+                description: Unexpected error
+    #-----------------------------------------------------------------------------------
+    # Routes Data
+    #-----------------------------------------------------------------------------------
+    /api/v1/routes_data/{user_id}/{route_id}:
+      post:
+        summary: Add a new route data
+        tags: [Routes Data]
+        parameters:
+            - $ref: '#/components/parameters/userId'
+            - $ref: '#/components/parameters/routeId'
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RouteData'
+        responses:
+        201:
+            description: success
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/RouteData'
+        400:
+            description: An SQL error
+        500:
+            description: Unexpected error
+      #-----------------------------------------------------
+      get:
+        summary: Get all the route data
+        tags: [Routes Data]
+        parameters:
+            - $ref: '#/components/parameters/userId'
+            - $ref: '#/components/parameters/routeId'
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RouteData'
+        responses:
+            200:
+                description: success
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/RouteData'
+            400:
+                description: An SQL error
+            404:
+                description: No Route data found for the user
+            500:
+                description: Unexpected error
+      #-----------------------------------------------------
+      put:
+        summary: Update the route data
+        tags: [Routes Data]
+        parameters:
+            - $ref: '#/components/parameters/userId'
+            - $ref: '#/components/parameters/routeId'
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PutRouteData'
+        responses:
+            201:
+                description: success
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/PutRouteData'
+            400:
+                description: An SQL error
+            404:
+                description: No Route data found for the user
+            500:
+                description: Unexpected error
+      #-----------------------------------------------------
+      delete:
+        summary: Delete all the route data
+        tags: [Routes Data]
+        parameters:
+            - $ref: '#/components/parameters/userId'
+            - $ref: '#/components/parameters/routeId'
+        responses:
+            201:
+                description: success
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/DeleteRouteData'
+            400:
+                description: An SQL error
+            404:
+                description: No route data found for the user
+            500:
+                description: Unexpected error
+    #-----------------------------------------------------------------------------------
+    /api/v1/routes_data/{user_id}/{route_id}/{data_name}:
+      get:
+        summary: Get a single route data for the user
+        tags: [Routes Data]
+        parameters:
+            - $ref: '#/components/parameters/userId'
+            - $ref: '#/components/parameters/routeId'
+            - $ref: '#/components/parameters/routeDataName'
+        responses:
+            200:
+                description: success
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/GetRouteSingleData'
+            400:
+                description: An SQL error
+            404:
+                description: Route / Data not found for the user
+            500:
+                description: Unexpected error
+      #-----------------------------------------------------
+      delete:
+        summary: Delete all the route data
+        tags: [Routes Data]
+        parameters:
+            - $ref: '#/components/parameters/userId'
+            - $ref: '#/components/parameters/routeId'
+            - $ref: '#/components/parameters/routeDataName'
+        responses:
+            201:
+                description: success
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/PeleteRouteSingleData'
+            400:
+                description: An SQL error
+            404:
+                description: Route data not found for the user
+            500:
+                description: Unexpected error
+    #-----------------------------------------------------------------------------------
+    # Routes Step
+    #-----------------------------------------------------------------------------------
+    /api/v1/routes_steps/{user_id}/{route_id}:
+      post:
+        summary: Add a new step to the route
+        tags: [Routes Step]
+        parameters:
+            - $ref: '#/components/parameters/userId'
+            - $ref: '#/components/parameters/routeId'
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RouteStep'
+        responses:
+        201:
+            description: success
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/RouteStep'
+        400:
+            description: An SQL error
+        500:
+            description: Unexpected error
+      #-----------------------------------------------------
+      get:
+        summary: Get all the steps for the route
+        tags: [Routes Step]
+        parameters:
+            - $ref: '#/components/parameters/userId'
+            - $ref: '#/components/parameters/routeId'
+        responses:
+        200:
+            description: success
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/GetRouteSteps'
+        400:
+            description: An SQL error
+        500:
+            description: Unexpected error
+      #-----------------------------------------------------
+      delete:
+        summary: Delete all the steps for the route
+        tags: [Routes Step]
+        parameters:
+            - $ref: '#/components/parameters/userId'
+            - $ref: '#/components/parameters/routeId'
+        responses:
+        201:
+            description: success
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/DeleteRouteSteps'
+        400:
+            description: An SQL error
+        500:
+            description: Unexpected error
+    #-----------------------------------------------------------------------------------
+    /api/v1/routes_steps/{user_id}/{route_id}/{step_id}:
+      put:
+        summary: Edit a route's step
+        tags: [Routes Step]
+        parameters:
+            - $ref: '#/components/parameters/userId'
+            - $ref: '#/components/parameters/routeId'
+            - $ref: '#/components/parameters/stepId'
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PutRouteStep'
+        responses:
+        201:
+            description: success
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/PutRouteStep'
+        400:
+            description: An SQL error
+        500:
+            description: Unexpected error
+      #-----------------------------------------------------
+      get:
+        summary: Get a route's step
+        tags: [Routes Step]
+        parameters:
+            - $ref: '#/components/parameters/userId'
+            - $ref: '#/components/parameters/routeId'
+            - $ref: '#/components/parameters/stepId'
+        responses:
+        200:
+            description: success
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/RouteStep'
+        400:
+            description: An SQL error
+        500:
+            description: Unexpected error
+      #-----------------------------------------------------
+      delete:
+        summary: Delete a route's step
+        tags: [Routes Step]
+        parameters:
+            - $ref: '#/components/parameters/userId'
+            - $ref: '#/components/parameters/routeId'
+            - $ref: '#/components/parameters/stepId'
+        responses:
+        201:
+            description: success
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/DeleteRouteStep'
+        400:
+            description: An SQL error
+        500:
+            description: Unexpected error
+    #-----------------------------------------------------------------------------------
+    # Routes Step Review
+    #-----------------------------------------------------------------------------------
+    /api/v1/routes_steps_reviews/{user_id}/{route_id}/{step_id}:
+      post:
+        summary: Add a new review to the route's step
+        tags: [Routes Step Review]
+        parameters:
+            - $ref: '#/components/parameters/userId'
+            - $ref: '#/components/parameters/routeId'
+            - $ref: '#/components/parameters/stepId'
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RouteStepReview'
+        responses:
+        201:
+            description: success
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/RouteStepReview'
+        400:
+            description: An SQL error
+        500:
+            description: Unexpected error
+      #-----------------------------------------------------
+      get:
+        summary: Get all the reviews for the step
+        tags: [Routes Step Review]
+        parameters:
+            - $ref: '#/components/parameters/userId'
+            - $ref: '#/components/parameters/routeId'
+            - $ref: '#/components/parameters/stepId'
+        responses:
+        200:
+            description: success
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/GetRouteStepReviews'
+        400:
+            description: An SQL error
+        500:
+            description: Unexpected error
+      #-----------------------------------------------------
+      delete:
+        summary: Delete all the reviews for the step
+        tags: [Routes Step Review]
+        parameters:
+            - $ref: '#/components/parameters/userId'
+            - $ref: '#/components/parameters/routeId'
+            - $ref: '#/components/parameters/stepId'
+        responses:
+        201:
+            description: success
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/DeleteRouteStepReviews'
+        400:
+            description: An SQL error
+        500:
+            description: Unexpected error
+    #-----------------------------------------------------------------------------------
+    /api/v1/routes_steps_reviews/{user_id}/{route_id}/{step_id}/{review_id}:
+      put:
+        summary: Edit a route's step's review
+        tags: [Routes Step Review]
+        parameters:
+            - $ref: '#/components/parameters/userId'
+            - $ref: '#/components/parameters/routeId'
+            - $ref: '#/components/parameters/stepId'
+            - $ref: '#/components/parameters/reviewId'
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PutRouteStepReview'
+        responses:
+        201:
+            description: success
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/PutRouteStepReview'
+        400:
+            description: An SQL error
+        500:
+            description: Unexpected error
+      #-----------------------------------------------------
+      get:
+        summary: Get a single review
+        tags: [Routes Step Review]
+        parameters:
+            - $ref: '#/components/parameters/userId'
+            - $ref: '#/components/parameters/routeId'
+            - $ref: '#/components/parameters/stepId'
+            - $ref: '#/components/parameters/reviewId'
+        responses:
+        200:
+            description: success
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/RouteStepReview'
+        400:
+            description: An SQL error
+        500:
+            description: Unexpected error
+      #-----------------------------------------------------
+      delete:
+        summary: Delete a single review
+        tags: [Routes Step Review]
+        parameters:
+            - $ref: '#/components/parameters/userId'
+            - $ref: '#/components/parameters/routeId'
+            - $ref: '#/components/parameters/stepId'
+            - $ref: '#/components/parameters/reviewId'
+        responses:
+        201:
+            description: success
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/DeleteRouteStepReview'
+        400:
+            description: An SQL error
+        500:
+            description: Unexpected error
+  components:
+    parameters:
+      #-----------------------------------------------------
+      userId:
+        name: id
+        in: path
+        required: true
+        description: The id of the user
+        schema:
+          type: string
+      #-----------------------------------------------------
+      preferenceName:
+        name: name
+        in: path
+        required: true
+        description: the name of the user preference to retrieve
+        schema:
+          type: string
+      #-----------------------------------------------------
+      routeId:
+        name: route_id
+        in: path
+        required: true
+        description: The route's id
+        schema:
+          type: string
+      #-----------------------------------------------------
+      routeDataName:
+        name: route_data_name
+        in: path
+        required: true
+        description: The route's data name
+        schema:
+          type: string
+      #-----------------------------------------------------
+      stepId:
+        name: Route_Step_ID
+        in: path
+        required: true
+        description: The route's step's id
+        schema:
+          type: string
+      #-----------------------------------------------------
+      reviewId:
+        name: Route_Step_Review_ID
+        in: path
+        required: true
+        description: The route's step's review's id
+        schema:
+          type: string
+    schemas:
+      #----------------------------------------------------
+      UserId:
+        type: object
+        required:
+          - user_id
+        properties:
+          user_id:
+            type: integer
+            description: user id
+        example:
+          user_id: 1
+      #-----------------------------------------------------
+      GetUser:
+        type: object
+        required:
+          - id
+          - user_name
+          - email
+        properties:
+          id:
+            type: string
+            description: Id of the user
+          user_name:
+            type: string
+            description: Name of the user
+          email:
+            type: string
+            description: email of the user
+          first_name:
+            type: string
+            description: firstName of the user
+          last_name:
+            type: string
+            description: lastName of the user
+          phone:
+            type: string
+            description: phone of the user
+          birthday:
+            type: date
+            description: date of birth of the user
+          role_id:
+            type: integer
+            description: role of the user
+        example:
+          id: 1
+          user_name: Sif
+          email: tom@tom.fr
+          first_name: Tom
+          last_name: Ibarreche
+          phone: 123
+          birthday: 12/10/1993
+          role_id: 1
+      #-----------------------------------------------------
+      SignUpUser:
+        type: object
+        required:
+          - user_name
+          - email
+          - password
+        properties:
+          id:
+            type: string
+            description: Id of the user
+          user_name:
+            type: string
+            description: Name of the user
+          email:
+            type: string
+            description: email of the user
+          password:
+            type: string
+            description: password of the user
+        example:
+          user_name: Tom
+          email: tom@tom.fr
+          password: myPassword
+      #-----------------------------------------------------
+      SignInUser:
+        type: object
+        required:
+          - password
+        properties:
+          user_name:
+            type: string
+            description: username of the user
+          email:
+            type: string
+            description: email of the user
+          password:
+            type: string
+            description: password of the user
+        example:
+          email: tom@tom.fr
+          password: myPassword
+      #-----------------------------------------------------
+      #                    PREFERENCES
+      #-----------------------------------------------------
+      PostPreferences:
+        type: object
+        required:
+          - user_id
+          - user_preferences
+        properties:
+          user_id:
+            type: integer
+            description: id of the user
+          new_user_preferences:
+            type: object
+            description: preferences to post
+        example:
+          user_id: 1
+          new_user_preferences:
+            gender: carnivaure
+            currency: $
+      #-----------------------------------------------------
+      GetPreferences:
+        type: object
+        required:
+          - user_id
+        properties:
+          user_id:
+            type: integer
+            description: id of the user
+          user_preferences:
+            type: array
+            description: preferences of the user
+        example:
+          user_id: 1
+          user_preferences: [gender: helico apache, currency: $]
+      #-----------------------------------------------------
+      DeletePreferences:
+        type: object
+        required:
+          - user_preferences
+        properties:
+          user_preferences:
+            type: array
+            description: preferences to delete
+        example:
+          user_preferences: [currency, gender]
+      #-----------------------------------------------------
+      UpdatePreferences:
+        type: object
+        required:
+          - user_preferences
+        properties:
+          user_preferences:
+            type: object
+            description: preferences to delete
+        example:
+          user_preferences:
+            gender: canard
+            currency: euro
+      #-----------------------------------------------------
+      GetUpdatePreferences:
+        type: object
+        required:
+          - user_id
+          - updated_user_preferences
+        properties:
+          updated_user_preferences:
+            type: array
+            description: preferences updated
+          user_id:
+            type: integer
+            description: user updated
+        example:
+          user_id: 1
+          updated_user_preferences: [gender: canard, currency: euro]
+      #-----------------------------------------------------
+      #                    ROUTES
+      #-----------------------------------------------------
+      GetRoutes:
+        type: Array of object
+        required:
+          - user_id
+        properties:
+          routes:
+            type: array
+            description: Routes of the user
+        example:
+          routes: Une tableau d'objet
+      #-----------------------------------------------------
+      Route:
+        type: object
+        required:
+          - route
+        properties:
+          route:
+            type: object
+            description: route to add
+        example:
+          date_planned: '2013-11-28 23:09:11.761166+03'
+          departure: '2013-11-28 23:09:11.761166+03'
+          from_label: 'Toulouse, 31000, France'
+          from_coords: '43.600735, 1.421452'
+          to_label: 'Paris, 75018, France'
+          to_coords: '48.887290, 2.355641'
+      PutRoute:
+        type: object
+        required:
+          - route
+        properties:
+          route:
+            type: object
+            description: route to add
+        example:
+          date_planned: '2013-11-29 23:09:11.761166+03'
+          departure: '2013-11-30 20:09:11.761166+03'
+          from_label: 'Toulouse, 31000, France'
+          from_coords: '43.600735, 1.421452'
+          to_label: 'Paris, 75018, France'
+          to_coords: '48.887290, 2.355641'
+      #-----------------------------------------------------
+      #                  ROUTE DATA
+      #-----------------------------------------------------
+      RouteData:
+        type: Object
+        required:
+          - data
+        properties:
+          routes:
+            type: object
+            description: Route data
+        example:
+          max_time: "25h"
+          distance: "2500km"
+      PutRouteData:
+        type: Object
+        required:
+          - data
+        properties:
+          routes:
+            type: object
+            description: Route data
+        example:
+          max_time: "30h"
+          distance: "2600km"
+      #-----------------------------------------------------
+      #                  ROUTE STEP
+      #-----------------------------------------------------
+      RouteStep:
+        type: Object
+        required:
+          - data
+        properties:
+          routes:
+            type: object
+            description: Route step
+        example:
+          data: "Paris, 75018, France"
+          coords: "48.887290, 2.355641"
+      PutRouteStep:
+        type: Object
+        required:
+          - data
+        properties:
+          routes:
+            type: object
+            description: Route step
+        example:
+          data: "Paris, 75018, France"
+          coords: "48.887290, 2.355641"
+      #-----------------------------------------------------
+      #                 ROUTE STEP REVIEWS
+      #-----------------------------------------------------
+      RouteStepReview:
+        type: Object
+        required:
+          - step
+        properties:
+          routes:
+            type: object
+            description: Route step reviews
+        example:
+          review: "Cool"
+          rate: "5"
+          reviewer_id: 1
+      PutRouteStepReview:
+        type: Object
+        required:
+          - step
+        properties:
+          routes:
+            type: object
+            description: Route step reviews
+        example:
+          review: "C'est pas cool"
+          rate: "5"
+          reviewer_id: 1
+      #-----------------------------------------------------
+      ApiError:
+        type: object
+        required:
+          - code
+          - message
+        properties:
+          code:
+            type: integer
+            description: code error
+          message:
+            type: string
+            description: message of the error
+        example:
+          code: 400
+          message: Bad request
+
+apis: ["S:/Dev/Node/Testing/src/route/*.js"]

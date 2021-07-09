@@ -1,0 +1,40 @@
+version: "3"
+services:
+#Express API Container
+    express-api:
+        build: .
+        env_file:
+            - ./.env
+        depends_on:
+            - postgres-database-test
+            - postgres-database
+        environment:
+            PORT: 5000
+        ports:
+            - '5000:5000'
+
+#Postgres DB Container
+    postgres-database:
+        image: postgres
+        volumes:
+            - postgres-db:/var/lib/postgresql/data
+        environment:
+            POSTGRES_HOST_AUTH_METHOD: trust
+        ports:
+            - '54320:5432'
+
+    postgres-database-test:
+        image: postgres
+        volumes:
+            - postgres-db-test:/var/lib/postgresql/data
+        environment:
+            POSTGRES_HOST_AUTH_METHOD: trust
+        ports:
+            - '54321:5432'
+
+#Redis Container
+    redis:
+        image: redis
+volumes:
+    postgres-db:
+    postgres-db-test:

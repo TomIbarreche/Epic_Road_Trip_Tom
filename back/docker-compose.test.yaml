@@ -1,0 +1,13 @@
+version: "3"
+services:
+    express-api:
+        build:
+            context: .
+            args:
+                NODE_ENV: test
+        command: bash -c "cd src/db && npx knex migrate:latest && npx knex seed:run && npm run test"
+        volumes:
+            - ./:/app:ro
+            - /app/node_modules
+        env_file:
+            - ./.env
