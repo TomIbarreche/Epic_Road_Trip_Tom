@@ -2,14 +2,14 @@ version: 2.1
 
 # Define the jobs we want to run for this project
 jobs:
-  pull-and-test:
+  pull-and-unit-test:
     docker:
       - image: arvindr226/alpine-ssh
     steps:
       - checkout
       - run: ssh -oStrictHostKeyChecking=no -v $USER@$IP "./test.sh"
 
-  pull-and-build:
+  deploy:
     docker:
       - image: arvindr226/alpine-ssh
     steps:
@@ -23,14 +23,14 @@ workflows:
   version: 2
   build-project:
     jobs:
-      - pull-and-test:
+      - pull-and-unit-test:
           filters:
             branches:
               only:
                 - develop
-      - pull-and-build:
+      - deploy:
           requires:
-            - pull-and-test
+            - pull-and-unit-test
           filters:
             branches:
               only:
