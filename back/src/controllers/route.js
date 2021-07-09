@@ -47,6 +47,7 @@ class RouteController {
                 req.body.to_coords =coords.destinationCoords;
             }
             const route = await routeDAO.createRoute(user_id, req.body);
+            console.log("CCCCCCCCCOOOOOOOIIIIIIINNNNNN",route);
             res.status(201).json(route);
         } catch (error) {
             console.log("BIG",error)
