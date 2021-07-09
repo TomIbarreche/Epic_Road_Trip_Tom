@@ -16,7 +16,6 @@ jobs:
       - run: 
           name: test
           command: ssh -oStrictHostKeyChecking=no -v $USER@$IP "./deploy.sh"
-    when: on_success
 
 # Orchestrate our job run sequence
 workflows:
@@ -29,6 +28,8 @@ workflows:
               only:
                 - develop
       - pull-and-build:
+          requires:
+            - pull-and-test
           filters:
             branches:
               only:
