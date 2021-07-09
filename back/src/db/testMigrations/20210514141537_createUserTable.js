@@ -9,6 +9,7 @@ exports.up = function(knex) {
         table.string('password').notNullable()
         table.string('phone');
         table.date('birthday');
+        table.integer('role_id').unsigned().notNullable().references('id').inTable('roles').onDelete('cascade').index().defaultTo(1);
         table.timestamps(true, true);
     })
   };
