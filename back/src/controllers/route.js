@@ -46,6 +46,7 @@ class RouteController {
                 req.body.from_coords =coords.departureCoords;
                 req.body.to_coords =coords.destinationCoords;
             }
+            console.log("USSSSSE",user_id);
             const route = await routeDAO.createRoute(user_id, req.body);
             console.log("CCCCCCCCCOOOOOOOIIIIIIINNNNNN",route);
             res.status(201).json(route);
