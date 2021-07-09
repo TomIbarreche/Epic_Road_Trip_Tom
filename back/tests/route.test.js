@@ -80,7 +80,7 @@ describe('Test for route API',()=>{
 
 
     describe('Failed Route Actions', ()=> {
-      it('Should fail to CREATE the route because user does not exists', async() => {
+     /* it('Should fail to CREATE the route because user does not exists', async() => {
           let route = {
               date_planned: "2013-11-28T20:09:11.761Z",
               departure: "2013-11-28T20:09:11.761Z",
@@ -92,7 +92,7 @@ describe('Test for route API',()=>{
           let response =  await request(server.app).post('/api/v1/routes/999999').send(route);
           expect(response.status).to.equal(500);
       });
-/*
+
       it("Should fail to GET the user's routes as the user doesn't exists", async()=>{
           const response = await request(server.app).get('/api/v1/routes/999999');
           expect(response.status).to.equal(404);
