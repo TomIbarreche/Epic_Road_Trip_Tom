@@ -93,7 +93,7 @@ describe('Test for route API',()=>{
           expect(response.status).to.equal(500);
       });
 
-      it("Should fail to GET the user's routes as the user doesn't exists", async()=>{
+      /*it("Should fail to GET the user's routes as the user doesn't exists", async()=>{
           const response = await request(server.app).get('/api/v1/routes/999999');
           expect(response.status).to.equal(404);
       });
@@ -101,7 +101,7 @@ describe('Test for route API',()=>{
       it("Should fail to GET the user's route, the route nor user doesn't exists", async()=>{
           const response = await request(server.app).get('/api/v1/routes/999999/9999999');
           expect(response.status).to.equal(404);
-      });
+      });*/
 
       it("Should fail to UPDATE the user's route, the route nor user doesn't exists", async()=>{
           let to_update = {
