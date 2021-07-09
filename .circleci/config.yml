@@ -2,18 +2,32 @@ version: 2.1
 
 # Define the jobs we want to run for this project
 jobs:
+  pull-and-test:
+    docker:
+      - image: arvindr226/alpine-ssh
+     steps:
+      - checkout
+      - run: ssh -oStrictHostKeyChecking=no -v $USER@$IP "./test.sh"
   pull-and-build:
     docker:
       - image: arvindr226/alpine-ssh
     steps:
       - checkout
-      - run: ssh -oStrictHostKeyChecking=no -v $USER@$IP "./deploy.sh"
+      - run: 
+          name: test
+          command: ssh -oStrictHostKeyChecking=no -v $USER@$IP "./deploy.sh"
+          when: on_success
 
 # Orchestrate our job run sequence
 workflows:
   version: 2
   build-project:
     jobs:
+      - pull-and-test:
+          filters:
+            branches:
+              only:
+                - develop
       - pull-and-build:
           filters:
             branches:
