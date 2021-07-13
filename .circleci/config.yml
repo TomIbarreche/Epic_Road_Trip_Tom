@@ -7,7 +7,9 @@ jobs:
       - image: arvindr226/alpine-ssh
     steps:
       - checkout
-      - run: ssh -oStrictHostKeyChecking=no -v $USER@$IP "./test.sh"
+      - run: 
+        name: unit test
+        command: ssh -oStrictHostKeyChecking=no -v $USER@$IP "./test.sh"
 
   deploy:
     docker:
@@ -15,7 +17,7 @@ jobs:
     steps:
       - checkout
       - run: 
-          name: test
+          name: deploy
           command: ssh -oStrictHostKeyChecking=no -v $USER@$IP "./deploy.sh"
 
 # Orchestrate our job run sequence
