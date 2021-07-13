@@ -27,7 +27,7 @@ describe('Test for authentification',()=>{
             insertedUser=  await request(server.app).post('/api/v1/signUp/').send(user);
             expect(insertedUser.status).to.equal(201);
             expect(insertedUser.body).to.be.an.instanceof(Array);
-            expect(insertedUser.body.length).to.equal(1);
+            expect(insertedUser.body.length).to.equal(10);
             expect(insertedUser.body[0].email).to.equal(user.email);
             expect(insertedUser.body[0].user_name).to.equal(user.user_name);
 
